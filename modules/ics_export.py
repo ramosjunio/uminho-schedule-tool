@@ -4,6 +4,7 @@ from datetime import timezone
 from zoneinfo import ZoneInfo
 
 import ics
+from ics.grammar.parse import ContentLine
 
 from lesson import Lesson
 from modules.base import BaseExportModule
@@ -13,15 +14,18 @@ class IcsExportModule(BaseExportModule):
     """
     The ICS export module supports the following config options:
         - file_name: Exported file name
+        - calendar_name: Calendar name in Google Calendar/Apple Calendar (X-WR-CALNAME)
         - override_file: Replace data on existing ICS file (useful for updating a single day/week)
     """
 
     file_name = "./export/out.ics"
+    calendar_name = "UMinho Schedule"
     override_file = None
 
     def __init__(self, config: dict):
         super().__init__()
         self.file_name = config["file_name"]
+        self.calendar_name = config.get("calendar_name", "UMinho Schedule")
         self.override_file = config.get("override_file")
 
     @staticmethod
@@ -89,6 +93,11 @@ class IcsExportModule(BaseExportModule):
                 calendar = ics.Calendar(f.read())
         else:
             calendar = ics.Calendar()
+
+        # Set calendar title and timezone metadata
+        calendar.extra.append(ContentLine(name="X-WR-CALNAME", value=self.calendar_name))
+        calendar.extra.append(ContentLine(name="NAME", value=self.calendar_name))
+        calendar.extra.append(ContentLine(name="X-WR-TIMEZONE", value="Europe/Lisbon"))
 
         new_lessons = {self.lesson_key(l): l for l in lessons}
 

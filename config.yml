@@ -16,3 +16,4 @@ export:
 
   ics:
     file_name: "export/out.ics"
+    calendar_name: "UMinho - Licenciatura em Marketing - 2.º Ano"
