@@ -1,6 +1,7 @@
 import hashlib
 import re
 from datetime import timezone
+from zoneinfo import ZoneInfo
 
 import ics
 
@@ -24,13 +25,23 @@ class IcsExportModule(BaseExportModule):
         self.override_file = config.get("override_file")
 
     @staticmethod
+    def to_utc(dt):
+        """
+        Convert a datetime to UTC.
+        If naive, assume Europe/Lisbon (Portugal local time) as published on UMinho portal.
+        """
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=ZoneInfo("Europe/Lisbon"))
+        return dt.astimezone(timezone.utc)
+
+    @staticmethod
     def lesson_key(l: Lesson):
         return (
             l.name,
             l.shift,
             l.location,
-            l.start.astimezone(timezone.utc),
-            l.end.astimezone(timezone.utc),
+            IcsExportModule.to_utc(l.start),
+            IcsExportModule.to_utc(l.end),
         )
 
     @staticmethod
@@ -39,7 +50,8 @@ class IcsExportModule(BaseExportModule):
         Generate a deterministic, stable UID for RFC 5545 compliance.
         Ensures Google Calendar recognizes the same class across weekly runs.
         """
-        raw_id = f"{l.name}_{l.shift}_{l.start.astimezone(timezone.utc).isoformat()}"
+        start_utc = IcsExportModule.to_utc(l.start)
+        raw_id = f"{l.name}_{l.shift}_{start_utc.isoformat()}"
         digest = hashlib.sha1(raw_id.encode("utf-8")).hexdigest()
         return f"{digest}@uminho-schedule"
 
@@ -47,12 +59,12 @@ class IcsExportModule(BaseExportModule):
     def lesson_short_id(l: Lesson) -> str:
         """
         Generate a clean, human-readable ID for personal reference (e.g. in Notion).
+        Uses the original local class time (e.g. 08:30 -> '0830').
         Examples:
           - 'Comportamento do Consumidor' -> 'CC-PL2-20260915-0830'
           - 'Investigação Operacional'    -> 'IO-TP1-20260915-0830'
           - 'Marketing Digital'           -> 'MD-TP1-20260915-1400'
         """
-        # Extract meaningful initials from the course name (ignoring prepositions)
         words = [
             w
             for w in re.sub(r"[^\w\s]", "", l.name).split()
@@ -107,8 +119,8 @@ class IcsExportModule(BaseExportModule):
                 name=l.name,
                 description=event_description,
                 location=l.location,
-                begin=l.start.astimezone(timezone.utc),
-                end=l.end.astimezone(timezone.utc),
+                begin=self.to_utc(l.start),
+                end=self.to_utc(l.end),
                 uid=self.lesson_uid(l),
             )
             updated_events[k] = event
