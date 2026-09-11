@@ -1,9 +1,11 @@
+import hashlib
 from datetime import timezone
 
 import ics
 
 from lesson import Lesson
 from modules.base import BaseExportModule
+
 
 class IcsExportModule(BaseExportModule):
     """
@@ -29,6 +31,16 @@ class IcsExportModule(BaseExportModule):
             l.start.astimezone(timezone.utc),
             l.end.astimezone(timezone.utc),
         )
+
+    @staticmethod
+    def lesson_uid(l: Lesson) -> str:
+        """
+        Generate a deterministic, stable UID for an event.
+        Ensures Google Calendar recognizes the same class across weekly runs.
+        """
+        raw_id = f"{l.name}_{l.shift}_{l.start.astimezone(timezone.utc).isoformat()}"
+        digest = hashlib.sha1(raw_id.encode("utf-8")).hexdigest()
+        return f"{digest}@uminho-schedule"
 
     def export(self, lessons: list[Lesson]):
         print("Exporting to ICS...")
@@ -65,6 +77,7 @@ class IcsExportModule(BaseExportModule):
                 location=l.location,
                 begin=l.start.astimezone(timezone.utc),
                 end=l.end.astimezone(timezone.utc),
+                uid=self.lesson_uid(l),
             )
             updated_events[k] = event
 
