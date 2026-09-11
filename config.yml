@@ -1,10 +1,10 @@
 scraper:
   timeout: 1 # Seconds before fetching next week's schedule
-  course_name: "Mestrado em Computação Avançada"
-  year: 1
+  course: "Licenciatura em Marketing"
+  year: 2
   week:
-    start: "2025-09-15"
-    end: "2025-10-01"
+    start: "2026-09-14"
+    end: "2026-12-19"
   #classes:
     #- "Sistemas e Arquiteturas de Computadores"
     #- "Ferramentas de Computação de Elevado Desempenho"
@@ -14,6 +14,5 @@ export:
     file_name: "out.json"
     indent: True
 
-  #ics:
-  #  file_name: "./export/out.ics"
-  #  override_file: "./export/out.ics"
+  ics:
+    file_name: "out.ics"
