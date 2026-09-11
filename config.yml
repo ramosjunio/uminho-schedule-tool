@@ -1,6 +1,6 @@
 scraper:
   timeout: 1 # Seconds before fetching next week's schedule
-  course: "Licenciatura em Marketing"
+  course_name: "Licenciatura em Marketing"
   year: 2
   week:
     start: "2026-09-14"
