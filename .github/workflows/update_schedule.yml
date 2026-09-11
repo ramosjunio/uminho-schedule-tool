@@ -29,6 +29,7 @@ jobs:
           mkdir -p export
           uv sync --extra ics
           uv run main.py
+          cp index.html export/ || true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
