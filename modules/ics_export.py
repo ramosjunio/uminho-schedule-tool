@@ -1,4 +1,5 @@
 import hashlib
+import re
 from datetime import timezone
 
 import ics
@@ -35,12 +36,38 @@ class IcsExportModule(BaseExportModule):
     @staticmethod
     def lesson_uid(l: Lesson) -> str:
         """
-        Generate a deterministic, stable UID for an event.
+        Generate a deterministic, stable UID for RFC 5545 compliance.
         Ensures Google Calendar recognizes the same class across weekly runs.
         """
         raw_id = f"{l.name}_{l.shift}_{l.start.astimezone(timezone.utc).isoformat()}"
         digest = hashlib.sha1(raw_id.encode("utf-8")).hexdigest()
         return f"{digest}@uminho-schedule"
+
+    @staticmethod
+    def lesson_short_id(l: Lesson) -> str:
+        """
+        Generate a clean, human-readable ID for personal reference (e.g. in Notion).
+        Examples:
+          - 'Comportamento do Consumidor' -> 'CC-PL2-20260915-0830'
+          - 'Investigação Operacional'    -> 'IO-TP1-20260915-0830'
+          - 'Marketing Digital'           -> 'MD-TP1-20260915-1400'
+        """
+        # Extract meaningful initials from the course name (ignoring prepositions)
+        words = [
+            w
+            for w in re.sub(r"[^\w\s]", "", l.name).split()
+            if w.lower() not in {"de", "do", "da", "dos", "das", "e", "em"}
+        ]
+        if len(words) > 1:
+            course_code = "".join(w[0] for w in words[:4]).upper()
+        elif words:
+            course_code = words[0][:4].upper()
+        else:
+            course_code = "CLASS"
+
+        shift_clean = re.sub(r"\s+", "", l.shift)
+        date_str = l.start.strftime("%Y%m%d-%H%M")
+        return f"{course_code}-{shift_clean}-{date_str}"
 
     def export(self, lessons: list[Lesson]):
         print("Exporting to ICS...")
@@ -71,9 +98,14 @@ class IcsExportModule(BaseExportModule):
 
         for k in add_keys:
             l = new_lessons[k]
+            short_id = self.lesson_short_id(l)
+
+            # Visible description in Google Calendar
+            event_description = f"Shift: {l.shift}\nID: {short_id}"
+
             event = ics.Event(
                 name=l.name,
-                description=l.shift,
+                description=event_description,
                 location=l.location,
                 begin=l.start.astimezone(timezone.utc),
                 end=l.end.astimezone(timezone.utc),
