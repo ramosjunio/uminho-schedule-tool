@@ -2,11 +2,19 @@ import argparse
 import yaml
 from yaml import CLoader as Loader
 
-from modules.ics_export import IcsExportModule
 from modules.json_export import JsonExportModule
 from scraper import Scraper
 
-available_modules = {"json": JsonExportModule, "ics": IcsExportModule}
+try:
+    from modules.ics_export import IcsExportModule
+except ModuleNotFoundError as exc:
+    if exc.name != "ics":
+        raise
+    IcsExportModule = None
+
+available_modules = {"json": JsonExportModule}
+if IcsExportModule:
+    available_modules["ics"] = IcsExportModule
 
 
 def main():
@@ -27,6 +35,11 @@ def main():
     scraper = Scraper(config["scraper"])
 
     for export_method in config["export"].keys():
+        if export_method == "ics" and IcsExportModule is None:
+            raise ModuleNotFoundError(
+                "ICS export requires the optional dependency 'ics'. "
+                "Install it with `uv sync --extra ics`."
+            )
         if export_method in available_modules.keys():
             export_module = available_modules[export_method](
                 config["export"][export_method]
