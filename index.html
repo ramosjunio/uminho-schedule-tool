@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMinho Schedule Calendar Feed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --border: #334155;
+      --accent: #10b981;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .container {
+      max-width: 680px;
+      width: 100%;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 2.25rem;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent);
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+    }
+    .author-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+    .author-subtitle a {
+      color: #60a5fa;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .author-subtitle a:hover { text-decoration: underline; }
+    p.lead {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 1.75rem;
+    }
+    .url-box {
+      display: flex;
+      gap: 0.5rem;
+      background: #0b1120;
+      border: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+    .url-input {
+      background: transparent;
+      border: none;
+      color: #93c5fd;
+      font-family: ui-monospace, monospace;
+      font-size: 0.875rem;
+      width: 100%;
+      outline: none;
+    }
+    .btn-copy {
+      background: var(--border);
+      color: var(--text);
+      border: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 0.375rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      white-space: nowrap;
+    }
+    .btn-copy:hover { background: #475569; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.65rem 1.25rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary {
+      background: #334155;
+      color: #e2e8f0;
+    }
+    .btn-secondary:hover { background: #475569; }
+    .guide {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    .guide h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.65rem;
+    }
+    .guide ol {
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+    .attribution-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px dashed var(--border);
+      border-radius: 0.5rem;
+      padding: 0.85rem 1rem;
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .attribution-card a {
+      color: #93c5fd;
+      text-decoration: none;
+    }
+    .attribution-card a:hover { text-decoration: underline; }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+      line-height: 1.6;
+    }
+    footer a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="badge">Live Calendar Feed</div>
+      <h1>UMinho Schedule Tool</h1>
+      <div class="author-subtitle">
+        Original scraper created by <a href="https://github.com/joaoalves03/uminho-schedule-tool" target="_blank" rel="noopener">João Alves (@joaoalves03)</a>
+      </div>
+
+      <p class="lead">
+        Automatically scrapes class timetables from Universidade do Minho and publishes an updated <code>.ics</code> calendar feed every week.
+      </p>
+
+      <div class="url-box">
+        <input type="text" id="calendar-url" class="url-input" readonly value="out.ics">
+        <button class="btn-copy" onclick="copyUrl()">Copy URL</button>
+      </div>
+
+      <div class="actions">
+        <a id="btn-webcal" href="#" class="btn btn-primary">📅 Subscribe in Calendar</a>
+        <a href="out.ics" class="btn btn-secondary" download>⬇️ Download .ics</a>
+        <a href="out.json" class="btn btn-secondary" target="_blank">📄 View JSON</a>
+      </div>
+
+      <div class="guide">
+        <h3>How to add to Google Calendar:</h3>
+        <ol>
+          <li>Open <strong>Google Calendar</strong> on desktop.</li>
+          <li>In the sidebar next to <strong>Other calendars</strong>, click <strong>+</strong> → <strong>From URL</strong>.</li>
+          <li>Paste the copied URL and click <strong>Add calendar</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="attribution-card">
+        <strong>Attribution:</strong> The underlying scraper engine and schedule parsing logic were originally developed by <a href="https://github.com/joaoalves03" target="_blank" rel="noopener">joaoalves03</a>. This instance is enhanced with automated GitHub Actions sync, deterministic UIDs, and Notion reference tags.
+      </div>
+    </div>
+
+    <footer>
+      Maintained by <a href="https://github.com/ramosjunio/uminho-schedule-tool">ramosjunio</a> • Original project by <a href="https://github.com/joaoalves03/uminho-schedule-tool">joaoalves03</a>
+    </footer>
+  </div>
+
+  <script>
+    const fullUrl = window.location.origin + window.location.pathname.replace(/\/$/, '') + '/out.ics';
+    document.getElementById('calendar-url').value = fullUrl;
+    document.getElementById('btn-webcal').href = fullUrl.replace(/^https?:\/\//, 'webcal://');
+
+    function copyUrl() {
+      const input = document.getElementById('calendar-url');
+      navigator.clipboard.writeText(input.value).then(() => {
+        const btn = document.querySelector('.btn-copy');
+        btn.textContent = 'Copied!';
+        setTimeout(() => { btn.textContent = 'Copy URL'; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
