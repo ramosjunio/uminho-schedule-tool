@@ -18,7 +18,7 @@ class IcsExportModule(BaseExportModule):
     def __init__(self, config: dict):
         super().__init__()
         self.file_name = config["file_name"]
-        self.override_file = config["override_file"]
+        self.override_file = config.get("override_file")
 
     @staticmethod
     def lesson_key(l: Lesson):
