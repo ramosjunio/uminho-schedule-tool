@@ -12,7 +12,7 @@ scraper:
 export:
   json:
     file_name: "out.json"
-    indent: True
+    indent: true
 
   ics:
     file_name: "out.ics"
