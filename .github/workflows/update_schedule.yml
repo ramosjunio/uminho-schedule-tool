@@ -27,6 +27,7 @@ jobs:
       - name: Run the UMinho Scraper
         run: |
           mkdir -p export
+          uv sync --extra ics
           uv run main.py
 
       - name: Commit and push the new calendar
