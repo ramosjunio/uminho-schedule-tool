@@ -225,7 +225,7 @@
       </div>
 
       <p class="lead">
-        Automatically scrapes class timetables from Universidade do Minho and publishes an updated <code>.ics</code> calendar feed every week.
+        Automatically scrapes class timetables from Universidade do Minho and publishes an updated <code>.ics</code> calendar feed every week with automatic naming and accurate Portugal timezone alignment.
       </p>
 
       <div class="url-box">
@@ -245,6 +245,7 @@
           <li>Open <strong>Google Calendar</strong> on your desktop.</li>
           <li>In the sidebar next to <strong>Other calendars</strong>, click <strong>+</strong> → <strong>From URL</strong>.</li>
           <li>Paste your calendar URL above and click <strong>Add calendar</strong>.</li>
+          <li>The calendar will automatically name itself and sync classes periodically.</li>
         </ol>
       </div>
 
@@ -252,7 +253,7 @@
         <summary>🍴 Want to set this up for your own course? Click here</summary>
         <ol>
           <li><strong>Fork the repository</strong> on GitHub to your account.</li>
-          <li>Edit <strong><code>config.yml</code></strong>: change <code>course_name</code>, <code>year</code>, and the <code>week</code> dates for your degree.</li>
+          <li>Edit <strong><code>config.yml</code></strong>: change <code>course_name</code>, <code>year</code>, and optionally customize the <code>calendar_name</code> (this will be the name of your calendar in Google Calendar).</li>
           <li>Go to the <strong>Actions</strong> tab in your fork and click <strong>"I understand my workflows, go ahead and enable them"</strong>.</li>
           <li>Under <strong>Actions</strong> → select <strong>Update Schedule</strong> → click <strong>Run workflow</strong> to build the calendar for the first time.</li>
           <li>Go to <strong>Settings</strong> → <strong>Pages</strong> → set Source to <strong>Deploy from a branch</strong> and select <strong><code>gh-pages</code></strong>.</li>
@@ -261,7 +262,7 @@
       </details>
 
       <div class="attribution-card">
-        <strong>Attribution:</strong> Core scraping and schedule parsing engine developed by <a href="https://github.com/joaoalves03" target="_blank" rel="noopener">joaoalves03</a>. Enhanced with automated GitHub Actions sync, deterministic UIDs, and Notion reference tags.
+        <strong>Attribution:</strong> Core scraping and schedule parsing engine developed by <a href="https://github.com/joaoalves03" target="_blank" rel="noopener">joaoalves03</a>. Enhanced with automated GitHub Actions sync, automatic calendar naming, timezone correction, deterministic UIDs, and Notion reference tags.
       </div>
     </div>
 

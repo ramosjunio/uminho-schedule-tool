@@ -16,13 +16,17 @@ This fork builds upon João Alves's original tool by adding automated cloud sync
    Runs on a weekly cron schedule (every Saturday morning) to scrape upcoming timetable changes and room reallocations.
 2. **🌐 GitHub Pages Calendar Hosting:**  
    Publishes the resulting `.ics` directly to GitHub Pages at a permanent, unauthenticated URL, enabling direct subscription in Google Calendar, Apple Calendar, and Outlook.
-3. **🔒 Deterministic RFC-5545 UIDs:**  
+3. **🏷️ Automatic Calendar Naming (`X-WR-CALNAME`):**  
+   Embeds calendar title and timezone metadata so calendar clients automatically name the subscribed calendar (e.g. *"UMinho - Licenciatura em Marketing"*).
+4. **🇵🇹 Accurate Portuguese Timezone Support:**  
+   Converts naive schedule times using `Europe/Lisbon` before emitting UTC, seamlessly handling both summer (WEST / UTC+1) and winter (WET / UTC+0) time without 1-hour offsets.
+5. **🔒 Deterministic RFC-5545 UIDs:**  
    Generates consistent, hash-based event UIDs (`lesson_uid`) so that external calendars correctly track, update, or reschedule existing classes across recurring runs without creating duplicate events.
-4. **📝 Human-Readable Class IDs for Notes (Notion):**  
+6. **📝 Human-Readable Class IDs for Notes (Notion):**  
    Adds clean, human-readable tags (e.g., `IO-TP1-20260915-0830` or `CC-PL2-20260915-0830`) directly into the event's visible description field, making it easy to cross-reference lecture notes in Notion or Obsidian.
-5. **🛡️ SSL/TLS Intermediate Certificate Workaround:**  
+7. **🛡️ SSL/TLS Intermediate Certificate Workaround:**  
    Resolves the missing intermediate CA certificate issue on UMinho's server (`alunos.uminho.pt`) to ensure clean execution across headless Linux CI environments.
-6. **💻 Web Landing Page:**  
+8. **💻 Web Landing Page:**  
    Includes a static dashboard served at the GitHub Pages root with 1-click subscription and direct `.ics`/`.json` downloads.
 
 ---
@@ -37,7 +41,7 @@ Subscribe to your live calendar feed in your calendar app:
 1. Open [Google Calendar](https://calendar.google.com) on desktop.
 2. In the left sidebar, click **`+`** next to **Other calendars** → **From URL**.
 3. Paste the URL above and click **Add calendar**.
-4. Google Calendar will periodically fetch updates in the background.
+4. The calendar name and events will populate automatically, syncing periodic updates in the background.
 
 ---
 
@@ -49,6 +53,7 @@ Want to use this tool for your own degree at UMinho? You can set up your own aut
 2. **Configure your degree** in `config.yml`:
    * Change `course_name` to your exact degree name as listed on the UMinho portal (e.g. `"Licenciatura em Engenharia Informática"`).
    * Change `year` to your curricular year (e.g. `1`, `2`, or `3`).
+   * Optionally set `calendar_name` under `export.ics`.
    * Adjust `week.start` and `week.end` dates.
    * Commit and push your changes.
 3. **Enable GitHub Actions**:
@@ -93,6 +98,7 @@ export:
 
   ics:
     file_name: "export/out.ics"
+    calendar_name: "UMinho - Licenciatura em Marketing" # Display name in calendar apps
 ```
 
 ---
@@ -114,4 +120,4 @@ uv run main.py
 ## 👥 Credits & Acknowledgments
 
 * **Original Creator:** [João Alves (@joaoalves03)](https://github.com/joaoalves03) — Author of the original [uminho-schedule-tool](https://github.com/joaoalves03/uminho-schedule-tool).
-* **Fork Maintainer:** [ramosjunio](https://github.com/ramosjunio) — GitHub Actions CI/CD, GitHub Pages hosting, deterministic UIDs, and Notion reference IDs.
+* **Fork Maintainer:** [ramosjunio](https://github.com/ramosjunio) — GitHub Actions CI/CD, GitHub Pages hosting, deterministic UIDs, timezone fix, and Notion reference IDs.
