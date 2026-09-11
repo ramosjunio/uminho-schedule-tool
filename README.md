@@ -31,5 +31,87 @@ This fork builds upon João Alves's original tool by adding automated cloud sync
 
 Subscribe to your live calendar feed in your calendar app:
 
-```text
-https://<your-username>.github.io/uminho-schedule-tool/out.ics
+`https://<your-username>.github.io/uminho-schedule-tool/out.ics`
+
+### Adding to Google Calendar
+1. Open [Google Calendar](https://calendar.google.com) on desktop.
+2. In the left sidebar, click **`+`** next to **Other calendars** → **From URL**.
+3. Paste the URL above and click **Add calendar**.
+4. Google Calendar will periodically fetch updates in the background.
+
+---
+
+## 🍴 Forking & Setting Up for Your Own Course
+
+Want to use this tool for your own degree at UMinho? You can set up your own automated calendar in a few minutes:
+
+1. **Fork this repository** to your own GitHub account.
+2. **Configure your degree** in `config.yml`:
+   * Change `course_name` to your exact degree name as listed on the UMinho portal (e.g. `"Licenciatura em Engenharia Informática"`).
+   * Change `year` to your curricular year (e.g. `1`, `2`, or `3`).
+   * Adjust `week.start` and `week.end` dates.
+   * Commit and push your changes.
+3. **Enable GitHub Actions**:
+   * In your fork, click the **Actions** tab at the top.
+   * Click the green button: **"I understand my workflows, go ahead and enable them"**.
+4. **Run the workflow for the first time**:
+   * In the **Actions** tab, click **Update Schedule** on the left.
+   * Click **Run workflow** → **Run workflow**.
+   * Wait ~1 minute for the run to finish (this creates the `gh-pages` branch).
+5. **Activate GitHub Pages**:
+   * Go to **Settings** → **Pages** in your repository.
+   * Under **Build and deployment** → **Source**, choose **Deploy from a branch**.
+   * Select the **`gh-pages`** branch and `/ (root)`, then click **Save**.
+
+Your live calendar feed and landing page will now automatically be hosted at:  
+`https://<your-username>.github.io/<your-repo-name>/`
+
+---
+
+## ⚙️ Configuration Reference
+
+Options available in `config.yml`:
+
+```yaml
+scraper:
+  timeout: 1 # Seconds to wait between weekly requests
+  course_name: "Licenciatura em Marketing"
+  year: 2
+  week:
+    start: "2026-09-14"
+    end: "2027-06-15"
+
+  # Optional: Filter specific subject names
+  # classes:
+  #   - "Investigação Operacional"
+  #   - "Comportamento do Consumidor"
+
+export:
+  json:
+    file_name: "out.json"
+    indent: true
+
+  ics:
+    file_name: "export/out.ics"
+```
+
+---
+
+## 🚀 Running Locally
+
+This project uses the [uv package manager](https://docs.astral.sh/uv/):
+
+```bash
+# Install dependencies
+uv sync --extra ics
+
+# Run scraper
+uv run main.py
+```
+
+---
+
+## 👥 Credits & Acknowledgments
+
+* **Original Creator:** [João Alves (@joaoalves03)](https://github.com/joaoalves03) — Author of the original [uminho-schedule-tool](https://github.com/joaoalves03/uminho-schedule-tool).
+* **Fork Maintainer:** [ramosjunio](https://github.com/ramosjunio) — GitHub Actions CI/CD, GitHub Pages hosting, deterministic UIDs, and Notion reference IDs.
