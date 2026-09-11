@@ -15,4 +15,4 @@ export:
     indent: true
 
   ics:
-    file_name: "out.ics"
+    file_name: "export/out.ics"
