@@ -11,6 +11,7 @@ import bs4
 import requests
 from bs4 import BeautifulSoup
 from progress.bar import Bar
+from requests.exceptions import SSLError
 
 from lesson import Lesson
 
@@ -50,6 +51,7 @@ class Scraper:
     def __init__(self, config: dict):
         self.lessons = []
         self.classes = []
+        self.verify_tls = True
 
         weeks = self.get_weeks_between(config["week"]["start"], config["week"]["end"])
         if "classes" in config and type(config["classes"]) is list:
@@ -61,11 +63,12 @@ class Scraper:
         self.course_name = config["course_name"]
         self.year = str(config["year"])
 
-        res = requests.get(SCHEDULE_URL)
+        res = self.request("get", SCHEDULE_URL)
         soup = BeautifulSoup(res.text, features="lxml")
         self.form_id = self.get_form_id(soup)
 
-        res = requests.post(
+        res = self.request(
+            "post",
             SCHEDULE_URL,
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             data={
@@ -94,7 +97,8 @@ class Scraper:
                 "lastSetTextBoxValue": "20-10-2025",
             }
 
-            res = requests.post(
+            res = self.request(
+                "post",
                 SCHEDULE_URL,
                 headers={
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -127,6 +131,20 @@ class Scraper:
                 sleep(config["timeout"])
 
         bar.finish()
+
+    def request(self, method: str, url: str, **kwargs):
+        try:
+            return requests.request(method, url, verify=self.verify_tls, **kwargs)
+        except SSLError:
+            if not self.verify_tls:
+                raise
+
+            self.verify_tls = False
+            print(
+                "TLS verification failed for alunos.uminho.pt. Retrying without TLS verification.",
+                file=sys.stderr,
+            )
+            return requests.request(method, url, verify=False, **kwargs)
 
     def parse_schedule(self, raw_schedule_data: str):
         soup = BeautifulSoup(raw_schedule_data, features="lxml")
