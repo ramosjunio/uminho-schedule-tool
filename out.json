@@ -490,48 +490,6 @@
         "end": "2026-10-30 18:00:00"
     },
     {
-        "name": "Contabilidade Financeira I",
-        "location": "CG - Edificio 2 - 1.05",
-        "shift": "TP1",
-        "start": "2026-11-02 14:30:00",
-        "end": "2026-11-02 16:30:00"
-    },
-    {
-        "name": "Gestão do Produto e Marca",
-        "location": "CG - Edificio 2 - 2.10",
-        "shift": "TP1",
-        "start": "2026-11-02 16:30:00",
-        "end": "2026-11-02 18:00:00"
-    },
-    {
-        "name": "Pesquisa de Marketing",
-        "location": "CG - Edificio 2 - 0.20",
-        "shift": "TP1",
-        "start": "2026-11-03 13:30:00",
-        "end": "2026-11-03 15:30:00"
-    },
-    {
-        "name": "Gestão do Produto e Marca",
-        "location": "CG - Edificio 2 - 2.06",
-        "shift": "TP1",
-        "start": "2026-11-03 15:30:00",
-        "end": "2026-11-03 17:00:00"
-    },
-    {
-        "name": "Marketing, Ética e Sustentabilidade",
-        "location": "CG - Edificio 3 - 2.03",
-        "shift": "TP1",
-        "start": "2026-11-04 13:30:00",
-        "end": "2026-11-04 15:00:00"
-    },
-    {
-        "name": "Comunicação Integrada de Marketing",
-        "location": "CG - Edificio 3 - 2.04",
-        "shift": "TP1",
-        "start": "2026-11-04 15:00:00",
-        "end": "2026-11-04 16:30:00"
-    },
-    {
         "name": "Pesquisa de Marketing",
         "location": "CG - Edificio 2 - 1.05",
         "shift": "TP1",
